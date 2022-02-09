@@ -10,8 +10,8 @@ CREATE TABLE Customers
     CustomerId serial PRIMARY KEY,
     Name  VARCHAR (50)  NOT NULL,
     PaysVat  BOOLEAN NOT NULL,
-    Closed BOOLEAN NOT NULL DEFAULT FALSE,
-    Paid BOOLEAN NOT NULL DEFAULT FALSE,
+    ClosedBasket BOOLEAN NOT NULL DEFAULT FALSE,
+    PaidBasket BOOLEAN NOT NULL DEFAULT FALSE,
     CreatedDate DATE NOT NULL DEFAULT CURRENT_DATE
 );
 
@@ -25,7 +25,7 @@ CREATE TABLE Products
 
 CREATE TABLE BasketHistory
 (
-    BasketId serial PRIMARY KEY,
+    BasketHistoryId serial PRIMARY KEY,
     CustomerId  INTEGER REFERENCES Customers (CustomerId),
     ProductId  INTEGER REFERENCES Products (ProductId),
     Quantity  INTEGER NOT NULL,
