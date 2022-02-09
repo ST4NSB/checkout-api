@@ -11,12 +11,12 @@ namespace DataAccess
             entityTypeBuilder.HasKey(x => x.BasketHistoryId);
             entityTypeBuilder.ToTable("baskethistory");
 
-            entityTypeBuilder.Property(x => x.BasketHistoryId).HasColumnName("BasketHistoryId");
-            entityTypeBuilder.Property(x => x.CustomerId).HasColumnName("CustomerId");
-            entityTypeBuilder.Property(x => x.ProductId).HasColumnName("ProductId");
-            entityTypeBuilder.Property(x => x.Quantity).HasColumnName("Quantity");
-            entityTypeBuilder.Property(x => x.CreatedDate).HasColumnName("CreatedDate").HasDefaultValue(DateTime.Now);
-            entityTypeBuilder.Property(x => x.UpdatedDate).HasColumnName("UpdatedDate").HasDefaultValue(DateTime.Now);
+            entityTypeBuilder.Property(x => x.BasketHistoryId).HasColumnName("baskethistoryid");
+            entityTypeBuilder.Property(x => x.CustomerId).HasColumnName("customerid");
+            entityTypeBuilder.Property(x => x.ProductId).HasColumnName("productid");
+            entityTypeBuilder.Property(x => x.Quantity).HasColumnName("quantity");
+            entityTypeBuilder.Property(x => x.CreatedDate).HasColumnName("createddate").HasDefaultValue(DateTime.Now);
+            entityTypeBuilder.Property(x => x.UpdatedDate).HasColumnName("updateddate").HasDefaultValue(DateTime.Now);
         }
     }
 }

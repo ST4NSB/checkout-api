@@ -11,10 +11,10 @@ namespace DataAccess
             entityTypeBuilder.HasKey(x => x.ProductId);
             entityTypeBuilder.ToTable("products");
 
-            entityTypeBuilder.Property(x => x.ProductId).HasColumnName("ProductId");
-            entityTypeBuilder.Property(x => x.Name).HasColumnName("Name");
-            entityTypeBuilder.Property(x => x.Price).HasColumnName("Price");
-            entityTypeBuilder.Property(x => x.CreatedDate).HasColumnName("CreatedDate").HasDefaultValue(DateTime.Now);
+            entityTypeBuilder.Property(x => x.ProductId).HasColumnName("productid");
+            entityTypeBuilder.Property(x => x.Name).HasColumnName("name");
+            entityTypeBuilder.Property(x => x.Price).HasColumnName("price");
+            entityTypeBuilder.Property(x => x.CreatedDate).HasColumnName("createddate").HasDefaultValue(DateTime.Now);
         }
     }
 }

@@ -1,8 +1,8 @@
-﻿using BusinessLogic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using DataAccess;
 using BusinessLogic.Interfaces;
+using Models.Requests;
+using Models.Responses;
 
 namespace CheckoutWeb.Controllers
 {
@@ -11,7 +11,7 @@ namespace CheckoutWeb.Controllers
     public class BasketsController : ControllerBase
     {
         private readonly ILogger<BasketsController> _logger;
-        private IBasketBLL _basketBLL;
+        private readonly IBasketBLL _basketBLL;
 
         public BasketsController(ILogger<BasketsController> logger, IBasketBLL basketBLL)
         {
@@ -20,24 +20,27 @@ namespace CheckoutWeb.Controllers
         }
 
         [HttpPost]
-        public int Post([FromBody] CreateCustomerRequest customer)
+        public IActionResult Post([FromBody] CreateCustomerRequestModel customer)
         {
-            return _basketBLL.CreateCustomer(customer);
+            var result = _basketBLL.CreateCustomer(customer);
+            return StatusCode((int)result.Status, result.Response);
         }
 
         [HttpPut("{id}/article-line")]
-        public string Put(int id, [FromBody] string value)
+        public ResponseModel<string> Put(int id, [FromBody] AddProductRequestModel product)
         {
-            return value;
+            _basketBLL.AddProductToBasket(id, product);
+
+            return new ResponseModel<string>();
         }
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public int Get(int id)
         {
             return id;
         }
 
-        [HttpPatch]
+        [HttpPatch("{id}")]
         public int Patch(int id)
         {
             return id;

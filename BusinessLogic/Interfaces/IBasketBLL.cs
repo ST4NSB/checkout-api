@@ -1,12 +1,11 @@
-﻿using DataAccess;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Models.Requests;
+using Models.Responses;
 
 namespace BusinessLogic.Interfaces
 {
     public interface IBasketBLL
     {
-        int CreateCustomer(CreateCustomerRequest createCustomerRequest);
+        ResponseModel<string> CreateCustomer(CreateCustomerRequestModel customer);
+        ResponseModel<string> AddProductToBasket(int id, AddProductRequestModel product);
     }
 }

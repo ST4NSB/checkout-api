@@ -1,6 +1,6 @@
-﻿namespace DataAccess
+﻿namespace Models.Requests
 {
-    public class CreateCustomerRequest
+    public class CreateCustomerRequestModel
     {
         public string Name { get; set; }
         public bool PaysVat { get; set; }
