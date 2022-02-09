@@ -1,7 +1,7 @@
 DROP DATABASE IF EXISTS checkoutdb;    
 
 CREATE DATABASE checkoutdb;
-GRANT ALL PRIVILEGES ON DATABASE checkoutdb TO postgres;
+GRANT ALL PRIVILEGES ON DATABASE checkoutdb TO admin;
 
 \c checkoutdb
 
