@@ -10,7 +10,5 @@ namespace DataAccess
         public bool ClosedBasket { get; set; }
         public bool PaidBasket { get; set; }
         public DateTime CreatedDate { get; set; }
-
-        public BasketHistoryEntity BasketHistory { get; set; }
     }
 }

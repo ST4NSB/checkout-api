@@ -15,16 +15,6 @@ namespace DataAccess
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<ProductEntity>()
-            .HasOne<BasketHistoryEntity>(s => s.BasketHistory)
-            .WithOne(ad => ad.Product)
-            .HasForeignKey<BasketHistoryEntity>(ad => ad.ProductId);
-
-            modelBuilder.Entity<CustomerEntity>()
-            .HasOne<BasketHistoryEntity>(s => s.BasketHistory)
-            .WithOne(ad => ad.Customer)
-            .HasForeignKey<BasketHistoryEntity>(ad => ad.CustomerId);
-
             new CustomerMap(modelBuilder.Entity<CustomerEntity>());
             new ProductMap(modelBuilder.Entity<ProductEntity>());
             new BasketHistoryMap(modelBuilder.Entity<BasketHistoryEntity>());

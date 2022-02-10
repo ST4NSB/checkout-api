@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DataAccess
 {
@@ -11,7 +12,7 @@ namespace DataAccess
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
 
-        public CustomerEntity Customer { get; set; }
+        [ForeignKey("ProductId")]
         public ProductEntity Product { get; set; }
     }
 }

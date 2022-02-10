@@ -5,7 +5,9 @@ namespace BusinessLogic.Interfaces
 {
     public interface IBasketBLL
     {
-        ResponseModel<string> CreateCustomer(CreateCustomerRequestModel customer);
-        ResponseModel<string> AddProductToBasket(int id, AddProductRequestModel product);
+        ResponseModel<string> CreateCustomer(CreateCustomerRequestModel customerReq);
+        ResponseModel<string> AddProductToBasket(int id, AddProductRequestModel productReq);
+        ResponseModel<BasketDetails> GetBasketDetails(int id);
+        ResponseModel<string> ProcessCustomerPayment(int id, ProcessCustomerPaymentRequestModel basketProcessReq);
     }
 }

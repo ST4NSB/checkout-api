@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using BusinessLogic.Interfaces;
 using Models.Requests;
 using Models.Responses;
@@ -10,12 +9,10 @@ namespace CheckoutWeb.Controllers
     [Route("api/[controller]")]
     public class BasketsController : ControllerBase
     {
-        private readonly ILogger<BasketsController> _logger;
         private readonly IBasketBLL _basketBLL;
 
-        public BasketsController(ILogger<BasketsController> logger, IBasketBLL basketBLL)
+        public BasketsController(IBasketBLL basketBLL)
         {
-            _logger = logger;
             _basketBLL = basketBLL;
         }
 
@@ -23,27 +20,39 @@ namespace CheckoutWeb.Controllers
         public IActionResult Post([FromBody] CreateCustomerRequestModel customer)
         {
             var result = _basketBLL.CreateCustomer(customer);
-            return StatusCode((int)result.Status, result.Response);
+            return FormatResult(result);
         }
 
         [HttpPut("{id}/article-line")]
-        public ResponseModel<string> Put(int id, [FromBody] AddProductRequestModel product)
+        public IActionResult Put(int id, [FromBody] AddProductRequestModel product)
         {
-            _basketBLL.AddProductToBasket(id, product);
-
-            return new ResponseModel<string>();
+            var result = _basketBLL.AddProductToBasket(id, product);
+            return FormatResult(result);
         }
 
         [HttpGet("{id}")]
-        public int Get(int id)
+        public IActionResult Get(int id)
         {
-            return id;
+            var result = _basketBLL.GetBasketDetails(id);
+            return FormatResult(result);
         }
 
         [HttpPatch("{id}")]
-        public int Patch(int id)
+        public IActionResult Patch(int id, ProcessCustomerPaymentRequestModel basketProcessReq)
         {
-            return id;
+            var result = _basketBLL.ProcessCustomerPayment(id, basketProcessReq);
+            return FormatResult(result);
+        }
+
+        [NonAction]
+        private IActionResult FormatResult<TResult>(ResponseModel<TResult> res)
+        {
+            if (!string.IsNullOrEmpty(res.ErrorMessage))
+            {
+                return StatusCode((int)res.Status, res.ErrorMessage);
+            }
+
+            return StatusCode((int)res.Status, res.Result);
         }
     }
 }
