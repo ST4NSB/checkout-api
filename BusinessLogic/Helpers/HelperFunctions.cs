@@ -4,7 +4,7 @@
     {
         public static decimal CalculateTotalGrossAmount(decimal netAmount)
         {
-            return netAmount * (1 + (Constants.VAT / 100m));
+            return netAmount * (1 + Constants.VAT);
         }
     }
 }

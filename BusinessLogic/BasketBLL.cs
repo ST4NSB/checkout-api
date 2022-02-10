@@ -20,6 +20,8 @@ namespace BusinessLogic
             _basketDAL = basketDAL;
         }
 
+        #region PUBLIC METHODS
+
         public ResponseModel<string> CreateCustomer(CreateCustomerRequestModel customerReq)
         {
             var customerId = _basketDAL.InsertCustomer(customerReq);
@@ -42,12 +44,16 @@ namespace BusinessLogic
                 };
             }
 
-            var prodId = _basketDAL.GetProductId(productReq);
-            if (prodId == null)
+            if (productReq.Price < 0M)
             {
-                prodId = _basketDAL.InsertProduct(productReq);
+                return new ResponseModel<string>
+                {
+                    Status = HttpStatusCode.Forbidden,
+                    ErrorMessage = $"You can't add a product with negative price! (price: {productReq.Price})"
+                };
             }
-            _logger.LogInformation($"Created product id: {prodId}");
+
+            var prodId = MergeRequestedProductInDb(productReq);
 
             if (_basketDAL.IsBasketClosed(id))
             {
@@ -57,17 +63,8 @@ namespace BusinessLogic
                     ErrorMessage = $"The basket for this customer (ID: {id}) is closed!"
                 };
             }
-                
-            var basketItemId = _basketDAL.GetBasketItemId(customerId: id, productId: (int)prodId);
-            if (basketItemId == null)
-            {
-                var createdId = _basketDAL.InsertBasketItemToHistory(customerId: id, productId: (int)prodId);
-                _logger.LogInformation($"Created basket history item id: {createdId}");
-            }
-            else
-            {
-                _basketDAL.IncreaseProductQuantityInBasket((int)basketItemId);
-            }
+
+            UpdateCustomerBasketInfo(id, prodId);
 
             return new ResponseModel<string>
             {
@@ -88,16 +85,17 @@ namespace BusinessLogic
             }
 
             var customerDetails = _basketDAL.GetCustomerDetailsById(id);
-            var basketDetails = _basketDAL.GetBasketDetails(id);
+            var basketDetails = _basketDAL.GetBasketDetailsById(id);
 
-            var totalNet = basketDetails?.Aggregate(0m, (total, item) => total + (item.Product.Price * item.Quantity)) ?? 0m;
+
+            var totalNet = basketDetails?.Aggregate(0M, (total, item) => total + (item.Product.Price * item.Quantity)) ?? 0M;
             var totalGross = customerDetails.PaysVat ? HelperFunctions.CalculateTotalGrossAmount(totalNet) : totalNet;
             _logger.LogInformation($"For customer (ID: {id}) --> Total Net: {totalNet}$, Total Gross: {totalGross}$");
 
             var res = new BasketDetails
             {
                 Id = id,
-                Items = basketDetails?.Select(item => new BasketItems
+                Items = basketDetails?.Select(item => new BasketItem
                 {
                     Item = item.Product.Name,
                     Price = item.Product.Price,
@@ -137,5 +135,37 @@ namespace BusinessLogic
                          $"the basket fee has {(basketProcessReq.Paid ? "been" : "not been")} paid!"
             };
         }
+
+        #endregion
+
+        #region PROTECTED METHODS
+
+        protected internal int? MergeRequestedProductInDb(AddProductRequestModel productReq)
+        {
+            var prodId = _basketDAL.GetProductId(productReq);
+            if (prodId == null)
+            {
+                prodId = _basketDAL.InsertProduct(productReq);
+            }
+            _logger.LogInformation($"Created product id: {prodId}");
+
+            return prodId;
+        }
+
+        protected internal void UpdateCustomerBasketInfo(int id, int? prodId)
+        {
+            var basketItemId = _basketDAL.GetBasketItemId(customerId: id, productId: (int)prodId);
+            if (basketItemId == null)
+            {
+                var createdId = _basketDAL.InsertBasketItemToHistory(customerId: id, productId: (int)prodId);
+                _logger.LogInformation($"Created basket history item id: {createdId}");
+            }
+            else
+            {
+                _basketDAL.IncreaseProductQuantityInBasket((int)basketItemId);
+            }
+        }
+
+        #endregion
     }
 }

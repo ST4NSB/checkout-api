@@ -14,7 +14,7 @@ namespace DataAccess.Interfaces
         int InsertBasketItemToHistory(int customerId, int productId);
         void IncreaseProductQuantityInBasket(int basketItemId);
         CustomerEntity GetCustomerDetailsById(int id);
-        IEnumerable<BasketHistoryEntity> GetBasketDetails(int customerId);
+        IEnumerable<BasketHistoryEntity> GetBasketDetailsById(int customerId);
         void UpdateCustomerBasketPaymentDetails(int customerId, ProcessCustomerPaymentRequestModel customerPaymentReq);
     }
 }

@@ -111,7 +111,7 @@ namespace DataAccess
             return customerDetails;
         }
 
-        public IEnumerable<BasketHistoryEntity> GetBasketDetails(int customerId)
+        public IEnumerable<BasketHistoryEntity> GetBasketDetailsById(int customerId)
         {
             var details = _checkoutContext.BasketHistory
                 .Include(x => x.Product)

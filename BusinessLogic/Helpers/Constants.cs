@@ -2,6 +2,6 @@
 {
     public static class Constants
     {
-        public const int VAT = 10;
+        public const decimal VAT = 0.1M;
     }
 }
