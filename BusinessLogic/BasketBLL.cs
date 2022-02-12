@@ -22,14 +22,18 @@ namespace BusinessLogic
 
         #region PUBLIC METHODS
 
-        public ResponseModel<string> CreateCustomer(CreateCustomerRequestModel customerReq)
+        public ResponseModel<CustomerCreatedModel> CreateCustomer(CreateCustomerRequestModel customerReq)
         {
             var customerId = _basketDAL.InsertCustomer(customerReq);
             _logger.LogInformation($"Created customer Id: {customerId}");
-            return new ResponseModel<string> 
+            return new ResponseModel<CustomerCreatedModel> 
             {
                 Status = HttpStatusCode.OK,
-                Result = $"Assigned ID: {customerId}, use it for your basket!"
+                Result = new CustomerCreatedModel 
+                {
+                    Id = customerId,
+                    InfoMessage = $"Assigned ID: {customerId}, use it for your basket!"
+                }
             };
         }
 
@@ -73,11 +77,11 @@ namespace BusinessLogic
             };
         }
 
-        public ResponseModel<BasketDetails> GetBasketDetails(int id)
+        public ResponseModel<BasketDetailsModel> GetBasketDetails(int id)
         {
             if (!_basketDAL.IsCustomerIdValid(id))
             {
-                return new ResponseModel<BasketDetails>
+                return new ResponseModel<BasketDetailsModel>
                 {
                     Status = HttpStatusCode.NotFound,
                     ErrorMessage = $"Customer with id: {id} not found!"
@@ -92,10 +96,10 @@ namespace BusinessLogic
             var totalGross = customerDetails.PaysVat ? HelperFunctions.CalculateTotalGrossAmount(totalNet) : totalNet;
             _logger.LogInformation($"For customer (ID: {id}) --> Total Net: {totalNet}$, Total Gross: {totalGross}$");
 
-            var res = new BasketDetails
+            var res = new BasketDetailsModel
             {
                 Id = id,
-                Items = basketDetails?.Select(item => new BasketItem
+                Items = basketDetails?.Select(item => new BasketItemModel
                 {
                     Item = item.Product.Name,
                     Price = item.Product.Price,
@@ -107,7 +111,7 @@ namespace BusinessLogic
                 PaysVat = customerDetails.PaysVat
             };
 
-            return new ResponseModel<BasketDetails>
+            return new ResponseModel<BasketDetailsModel>
             {
                 Status = HttpStatusCode.OK,
                 Result = res
@@ -146,8 +150,8 @@ namespace BusinessLogic
             if (prodId == null)
             {
                 prodId = _basketDAL.InsertProduct(productReq);
+                _logger.LogInformation($"Created product id: {prodId}");
             }
-            _logger.LogInformation($"Created product id: {prodId}");
 
             return prodId;
         }

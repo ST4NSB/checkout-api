@@ -19,12 +19,14 @@ namespace checkout
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfiguration Configuration;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<CheckoutDbContext>(options => options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+            var dbConnection = "Host=localhost;Port=5432;Database=checkoutdb;Username=admin;Password=admin1234";
+            services.AddDbContext<CheckoutDbContext>(options => options
+                    .UseNpgsql(dbConnection));
 
             services.AddScoped<IBasketBLL, BasketBLL>();
             services.AddScoped<IBasketDAL, BasketDAL>();

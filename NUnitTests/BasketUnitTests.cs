@@ -15,7 +15,7 @@ using System.Net;
 namespace NUnitTests
 {
     [TestFixture]
-    public class BasketTests
+    public class BasketUnitTests
     {
         private Mock<IBasketDAL> _basketDAL;
         private Mock<ILogger<IBasketBLL>> _logger;
@@ -128,22 +128,22 @@ namespace NUnitTests
                 },
             };
 
-            var expected = new ResponseModel<BasketDetails>
+            var expected = new ResponseModel<BasketDetailsModel>
             {
                 Status = HttpStatusCode.OK,
-                Result = new BasketDetails
+                Result = new BasketDetailsModel
                 {
                     Id = id,
                     Customer = "TestCustomer",
-                    Items = new List<BasketItem>
+                    Items = new List<BasketItemModel>
                     {
-                        new BasketItem
+                        new BasketItemModel
                         {
                             Quantity = quantities[0],
                             Item = "ItemTest1",
                             Price = priceFirstItem
                         },
-                        new BasketItem
+                        new BasketItemModel
                         {
                             Quantity = quantities[1],
                             Item = "ItemTest2",

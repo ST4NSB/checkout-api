@@ -1,6 +1,6 @@
 ﻿namespace Models.Responses
 {
-    public class BasketItem
+    public class BasketItemModel
     {
         public string Item { get; set; }
         public decimal Price { get; set; }
