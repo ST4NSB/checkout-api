@@ -8,6 +8,8 @@ Prerequisite:
 2. **docker-compose up -d** in terminal to start the database container
 3. navigate to https://localhost:44355/swagger in browser
 
+(for running Nunit tests, you might need to include (**[assembly: InternalsVisibleTo("NUnitTests")]**) in BusinessLogic.AssemblyInfo.cs
+
 ## Details
 
 - **POST** /api/baskets/ - Creates a new customer, will return an Id to use for the basket
